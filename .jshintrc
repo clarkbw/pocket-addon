@@ -1,0 +1,11 @@
+{
+  "esnext": true,
+  "indent": 2,
+  "maxerr": 50,
+  "moz": true,
+  "node": true,
+  "quotmark": "single",
+  "strict": true,
+  "trailing": true,
+  "newcap": false
+}

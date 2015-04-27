@@ -1,0 +1,14 @@
+{
+  "name": "pocket-addon",
+  "title": "pocket-addon",
+  "id": "jid1-A0W9fYXSPQIYYw",
+  "description": "a basic add-on",
+  "author": "",
+  "license": "MPL 2.0",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "cfx run",
+    "pretest": "jscs . && jshint .",
+    "test": "cfx test"
+  }
+}
