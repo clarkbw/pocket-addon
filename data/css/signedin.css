@@ -1,0 +1,25 @@
+/*  signup.css
+ *
+ *  Description:
+ *  With base elements out of the way, this sets all custom styling for the extension.
+ *
+ *  Contents:
+ *  Global
+ *  Core detail
+ *  Buttons
+ *  Responsive
+ */
+
+/*=Global
+--------------------------------------------------------------------------------------- */
+.pkt_ext_containersignedin {
+    background-color: #ebebeb;
+    color: #333;
+    display: block;
+    font-size: 16px;
+    font-family: "FiraSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+}
