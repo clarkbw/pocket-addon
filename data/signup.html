@@ -12,6 +12,11 @@
         <script type="text/javascript" src="js/tmpl.js"></script>
         <script type="text/javascript" src="js/messages.js"></script>
         <script type="text/javascript" src="js/signup.js"></script>
+        <script type="text/javascript">
+        addon.port.on('options', function(options) {
+          console.log('options', options);
+        });
+        </script>
     </head>
     <body class="pkt_ext_containersignup" aria-live="polite">
 
