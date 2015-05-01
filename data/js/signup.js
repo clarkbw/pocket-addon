@@ -146,7 +146,7 @@ PKT_SIGNUP_OVERLAY.prototype = {
 
         // tell background we're ready
         // thePKT_SIGNUP.sendMessage("show");
-        self.port.emit('show');
+        addon.port.emit('show');
 
         // close events
         this.initCloseTabEvents();
@@ -190,12 +190,8 @@ $(function() {
   $('body').on('click', '.btn, a[href]', function(e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('self.port.emit(openTabWithUrl)', $(this).attr('href'));
-    try {
-      addon.port.emit('openTabWithUrl', $(this).attr('href'));
-    } catch (e) {
-      console.error(e);
-    }
+    console.log('addon.port.emit(openTabWithUrl)', $(this).attr('href'));
+    addon.port.emit('openTabWithUrl', $(this).attr('href'));
     return false;
   });
 });
