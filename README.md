@@ -7,6 +7,8 @@ You need the JPM module which available via [npm](http://npmjs.com/).
 
 ```
   npm -g install jpm
+  npm install
+  gulp
 ```
 
 ## Development
