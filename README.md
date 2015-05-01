@@ -34,3 +34,5 @@ Similarly you could also use the JPM commands directly:
 ```
   jpm test
 ```
+
+https://travis-ci.org/clarkbw/pocket-addon.svg
