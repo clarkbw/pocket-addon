@@ -1,14 +1,20 @@
 {
   "name": "pocket-addon",
   "title": "pocket-addon",
-  "id": "jid1-A0W9fYXSPQIYYw",
+  "id": "jid1-A0W9fYXSPQIYYw@mozilla.com",
   "description": "a basic add-on",
+  "main": "./lib/main.js",
   "author": "",
   "license": "MPL 2.0",
   "version": "0.0.1",
   "scripts": {
-    "start": "cfx run",
+    "start": "jpm run -b nightly",
     "pretest": "jscs . && jshint .",
-    "test": "cfx test"
+    "test": "jpm test -b nightly"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkbw/pocket-addon.git"
   }
 }
