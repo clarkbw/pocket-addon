@@ -35,4 +35,4 @@ Similarly you could also use the JPM commands directly:
   jpm test
 ```
 
-https://travis-ci.org/clarkbw/pocket-addon.svg
+[![Build Status](https://travis-ci.org/clarkbw/pocket-addon.svg)](https://travis-ci.org/clarkbw/pocket-addon)
