@@ -1,26 +1,26 @@
 # pocket-addon
-A Firefox add-on for testing Pocket built with the [mozilla add-on sdk](https://github.com/mozilla/addon-sdk/)
+A Firefox add-on for testing Pocket built with the [mozilla add-on sdk, jpm](https://github.com/mozilla/jpm/)
 
 ## Setup
 
-You need the Mozilla Add-on SDK which is most easily available from [homebrew](http://brew.sh/) for Mac.
+You need the JPM module which available via [npm](http://npmjs.com/).
 
 ```
-  brew install mozilla-addon-sdk
+  npm -g install jpm
 ```
 
 ## Development
 
-Assuming you have node installed you can use the npm commands, this is useful for travis testing but not required for development.
+Use the npm commands.
 
 ```
   npm start
 ```
 
-Similarly you could also use the Mozilla Add-on SDK commands:
+Similarly you could also use the JPM commands directly:
 
 ```
-  cfx run
+  jpm run -b nightly
 ```
 
 ## Test
@@ -30,5 +30,5 @@ Similarly you could also use the Mozilla Add-on SDK commands:
 ```
 
 ```
-  cfx test
+  jpm test
 ```
