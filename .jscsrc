@@ -1,5 +1,7 @@
 {
   "preset": "google",
+  "excludeFiles": ["data", "node_modules", "test"],
+  "maxErrors": 10,
   "maximumLineLength": 160,
   "esnext": true
 }
