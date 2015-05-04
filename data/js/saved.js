@@ -51,8 +51,7 @@ var PKT_SAVED_OVERLAY = function (options)
     });
     this.fillUserTags = function() {
       addon.port.emit('getTags');
-
-        console.log('start of logic for fillUserTags');
+      console.log('start of logic for fillUserTags');
         // thePKT_SAVED.sendMessage("getTags",{},function(resp)
         // {
         //     console.log('got a big tag response',resp);
@@ -398,10 +397,9 @@ var PKT_SAVED_OVERLAY = function (options)
                 myself.disableInput();
                 $('.pkt_ext_containersaved').find('.pkt_ext_detail h2').text(myself.dictJSON.processingremove);
                 console.log('processing page removal',myself.savedItemId);
-                thePKT_SAVED.sendMessage("deleteItem",
-                {
-                    itemId: myself.savedItemId
-                },function(resp) {
+                // addon.port.emit'deleteItem', itemId: myself.savedItemId);
+                thePKT_SAVED.sendMessage('deleteItem', myself.savedItemId,
+                function(resp) {
                     console.log('got a removal message',resp);
                     if (resp.status == 'success') {
                         myself.showStateFinalMsg(myself.dictJSON.pageremoved);
@@ -419,12 +417,6 @@ var PKT_SAVED_OVERLAY = function (options)
             e.preventDefault();
             console.log('sending new tab messsage',$(this).attr('href'));
             addon.port.emit('openTabWithUrl', $(this).attr('href'));
-            // thePKT_SAVED.sendMessage("openTabWithUrl",
-            // {
-            //     url: $(this).attr('href'),
-            //     activate: true
-            // });
-            // myself.closePopup();
         });
     };
     this.showActiveTags = function() {

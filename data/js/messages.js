@@ -1,63 +1,28 @@
-// Documentation of methods used here are at:
-// https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Interaction_between_privileged_and_non-privileged_pages
-// jscs:disable
+/*global addon */
+'use strict';
 var Messaging = (function() {
 
 	function addMessageListener(messageId, callback) {
-
 		addon.port.on(messageId, callback);
-
-		document.addEventListener('PKT_' + messageId, function(e) {
-
-			callback(JSON.parse(e.target.getAttribute("payload"))[0]);
-
-			// TODO: Figure out why e.target.parentNode is null
-			// e.target.parentNode.removeChild(e.target);
-
-		},false);
-
 	}
 
 	function removeMessageListener(messageId, callback) {
-
-		document.removeEventListener('PKT_' + messageId, callback);
-
+		addon.port.off(messageId, callback);
 	}
 
 	function sendMessage(messageId, payload, callback) {
-		console.log('EMIT', messageId, payload);
-		addon.port.emit(messageId, payload);
-
-		// Create a callback to listen for a response
 		if (callback) {
-			 // Message response id is messageId + "Response"
-	        var messageResponseId = messageId + "Response";
-	        var responseListener = function(responsePayload) {
-	            callback(responsePayload);
-	            removeMessageListener(messageResponseId, responseListener);
-	        }
-
-	        addMessageListener(messageResponseId, responseListener);
-	    }
-
-	    // Send message
-		var element = document.createElement("PKTMessageFromPanelElement");
-		element.setAttribute("payload", JSON.stringify([payload]));
-		document.documentElement.appendChild(element);
-
-		var evt = document.createEvent("Events");
-		evt.initEvent('PKT_'+messageId, true, false);
-		element.dispatchEvent(evt);
-
+			addon.port.once(messageId, callback);
+		}
+		addon.port.emit(messageId, payload);
 	}
 
-
-    /**
-     * Public functions
-     */
-    return {
-        addMessageListener : addMessageListener,
-        removeMessageListener : removeMessageListener,
-        sendMessage: sendMessage
-    };
+	/**
+	* Public functions
+	*/
+	return {
+		addMessageListener : addMessageListener,
+		removeMessageListener : removeMessageListener,
+		sendMessage: sendMessage
+	};
 }());
