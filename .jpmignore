@@ -1,0 +1,7 @@
+node_modules/handlebars
+node_modules/jquery
+node_modules/jquery-tokeninput
+node_modules/gulp*
+node_modules/del
+node_modules/normalize.css
+.git
