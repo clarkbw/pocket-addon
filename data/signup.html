@@ -7,10 +7,6 @@
         <link rel="stylesheet" href="css/firasans.css">
         <link rel="stylesheet" href="css/signup.css">
         <script type="text/javascript" src="js/vendor/jquery.js"></script>
-        <script type="text/javascript" src="js/vendor/handlebars.runtime.js"></script>
-        <script type="text/javascript" src="js/dictionary.js"></script>
-        <script type="text/javascript" src="js/tmpl.js"></script>
-        <script type="text/javascript" src="js/messages.js"></script>
         <script type="text/javascript" src="js/signup.js"></script>
         <script type="text/javascript">
         addon.port.on('options', function(options) {
@@ -19,6 +15,18 @@
         </script>
     </head>
     <body class="pkt_ext_containersignup" aria-live="polite">
-
+      <h4 class="pkt_ext_introrecommend" data-l10n-id="signup_introrecommend"></h4>
+      <div class="pkt_ext_introdetail">
+      	<h2 class="pkt_ext_logo" data-l10n-id="signup_logo"></h2>
+      	<div class="pkt_ext_introimg"></div>
+      	<p class="pkt_ext_tagline" data-l10n-id="signup_tagline"></p>
+      	<p><a class="pkt_ext_learnmore" href="http://getpocket.com" target="_blank" data-l10n-id="signup_learnmore"></a></p>
+      </div>
+      <div class="pkt_ext_signupdetail">
+      	<h4 data-l10n-id="signup_signuptosave"></h4>
+      	<p class="btn-container"><a href="https://firefox.dev.readitlater.com/ff_signup" target=_blank" class="btn signup-btn-firefox"><span class="logo"></span><span class="text" data-l10n-id="signup_signupfirefox"></span></a> <a class="ff_signuphelp" href="https://www.mozilla.org" target="_blank" data-l10n-id="signup_help"></a></p>
+      	<p class="btn-container"><a href="http://firefox.dev.readitlater.com/signup?force=email&src=extension" target="_blank" class="btn btn-secondary signup-btn-email signup-btn-initstate" data-l10n-id="signup_signupemail"></a></p>
+      	<p class="alreadyhave"><span data-l10n-id="signup_alreadyhaveacct"></span> <a href="http://firefox.dev.readitlater.com/login?ep=3&src=extension" target="_blank" data-l10n-id="signup_loginnow"></a>.</p>
+      </div>
     </body>
 </html>
