@@ -1,5 +1,7 @@
 'use strict';
-var main = require('./panel');
+var saved = require('../lib/panels/saved');
+var signedin = require('../lib/panels/signedin');
+var signup = require('../lib/panels/signup');
 
 exports['test panel'] = function(assert) {
   assert.pass('Unit test running!');

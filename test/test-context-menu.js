@@ -1,5 +1,5 @@
 'use strict';
-var main = require('./context-menu');
+var cm = require('../lib/context-menu');
 
 exports['test context menu'] = function(assert) {
   assert.pass('Context Menu Unit test running!');
