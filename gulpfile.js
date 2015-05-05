@@ -33,7 +33,7 @@ var vendorcss = [
 // CSS
 gulp.task('vendorcss', function() {
   return gulp.src(vendorcss)
-    .pipe($.postcss([autoprefixer({browsers: ['last 2 Firefox versions']})]))
+    .pipe($.postcss([autoprefixer({browsers: ['last 2 Firefox versions']}), $.minifycss]))
     .pipe(gulp.dest(config.paths.vendorcss));
 });
 
