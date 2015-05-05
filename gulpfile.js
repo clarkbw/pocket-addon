@@ -7,6 +7,7 @@
 
 var gulp = require('gulp');
 var del = require('del');
+var autoprefixer = require('autoprefixer-core');
 var dirname = require('path').dirname;
 var config = require('./package.json');
 // Load plugins
@@ -32,6 +33,7 @@ var vendorcss = [
 // CSS
 gulp.task('vendorcss', function() {
   return gulp.src(vendorcss)
+    .pipe($.postcss([autoprefixer({browsers: ['last 2 Firefox versions']})]))
     .pipe(gulp.dest(config.paths.vendorcss));
 });
 

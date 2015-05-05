@@ -4,4 +4,5 @@ node_modules/jquery-tokeninput
 node_modules/gulp*
 node_modules/del
 node_modules/normalize.css
+node_modules/autoprefixer-core
 .git
