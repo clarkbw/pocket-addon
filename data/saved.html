@@ -7,14 +7,44 @@
         <link rel="stylesheet" href="css/firasans.css">
         <link rel="stylesheet" href="css/saved.css">
         <script type="text/javascript" src="js/vendor/jquery.js"></script>
-        <script type="text/javascript" src="js/vendor/handlebars.runtime.js"></script>
         <script type="text/javascript" src="js/vendor/jquery.tokeninput.js"></script>
-        <script type="text/javascript" src="js/dictionary.js"></script>
-        <script type="text/javascript" src="js/tmpl.js"></script>
         <script type="text/javascript" src="js/messages.js"></script>
         <script type="text/javascript" src="js/saved.js"></script>
+        <script type="text/javascript">
+        addon.port.on('options', function(options) {
+          console.log('options', options);
+        });
+        </script>
     </head>
     <body class="pkt_ext_containersaved" aria-live="polite">
-
+      <div class="pkt_ext_initload">
+          <div class="pkt_ext_loadingspinner"><div></div></div>
+      </div>
+      <div class="pkt_ext_detail">
+          <div class="pkt_ext_logo"></div>
+          <div class="pkt_ext_topdetail">
+              <h2 data-l10n-id="saved_pagedsaved"></h2>
+              <nav class="pkt_ext_item_actions pkt_ext_cf">
+                  <ul>
+                      <li><a class="pkt_ext_removeitem" href="#" data-l10n-id="saved_removepage"></a></li>
+                      <li class="pkt_ext_actions_separator"></li>
+                      <li><a class="pkt_ext_openpocket" href="http://firefox.dev.readitlater.com/a" target="_blank" data-l10n-id="saved_viewlist"></a></li>
+                  </ul>
+              </nav>
+          </div>
+          <p class="pkt_ext_edit_msg"></p>
+          <div class="pkt_ext_tag_detail pkt_ext_cf">
+              <div class="pkt_ext_tag_input_wrapper">
+                  <div class="pkt_ext_tag_input_blocker"></div>
+                  <input class="pkt_ext_tag_input" type="text" data-l10n-id="saved_addtags">
+              </div>
+              <a href="#" class="pkt_ext_btn pkt_ext_btn_disabled" data-l10n-id="saved_save"></a>
+          </div>
+      </div>
+      <div class="pkt_ext_suggestedtag_detail pkt_ext_suggestedtag_detail_loading">
+          <h4 data-l10n-id="saved_suggestedtags"></h4>
+          <div class="pkt_ext_loadingspinner"><div></div></div>
+          <ul class="pkt_ext_cf"></ul>
+      </div>
     </body>
 </html>

@@ -1,3 +1,7 @@
+'use strict';
+/*jshint browser:true */
+/*globals $,addon */
+
 /*
 PKT_SAVED_OVERLAY is the view itself and contains all of the methods to manipute the overlay and messaging.
 It does not contain any logic for saving or communication with the extension or server.
@@ -44,131 +48,7 @@ var PKT_SAVED_OVERLAY = function (options)
             }
         }
     };
-    addon.port.on('getTags', function(resp) {
-      if (typeof resp == 'object' && typeof resp.tags == 'object') {
-        myself.userTags = resp.tags;
-      }
-    });
-    this.fillUserTags = function() {
-      addon.port.emit('getTags');
-      console.log('start of logic for fillUserTags');
-        // thePKT_SAVED.sendMessage("getTags",{},function(resp)
-        // {
-        //     console.log('got a big tag response',resp);
-        //     if (typeof resp == 'object' && typeof resp.tags == 'object')
-        //     {
-        //         myself.userTags = resp.tags;
-        //     }
-        // });
-    };
-    addon.port.on('getSuggestedTags', function(resp) {
-        $('.pkt_ext_suggestedtag_detail').removeClass('pkt_ext_suggestedtag_detail_loading');
-        console.log('got suggested tags response',resp);
-        if (resp.status == 'success')
-        {
-            var newtags = [];
-            for (var i = 0; i < resp.value.suggestedTags.length; i++)
-            {
-                newtags.push(resp.value.suggestedTags[i].tag);
-            }
-            myself.suggestedTagsLoaded = true;
-            if (!myself.mouseInside) {
-                myself.startCloseTimer();
-            }
-            myself.fillTagContainer(newtags,$('.pkt_ext_suggestedtag_detail ul'),'token_suggestedtag');
-        }
-        else if (resp.status == 'error') {
-            var msg = $('<p class="suggestedtag_msg">');
-            msg.text(resp.error);
-            $('.pkt_ext_suggestedtag_detail').append(msg);
-            this.suggestedTagsLoaded = true;
-            if (!myself.mouseInside) {
-                myself.startCloseTimer();
-            }
-        }
-    });
-    this.fillSuggestedTags = function() {
-        if (!$('.pkt_ext_suggestedtag_detail').length)
-        {
-            myself.suggestedTagsLoaded = true;
-            myself.startCloseTimer();
-            return;
-        }
-        console.log('calling suggested tags',myself.savedUrl);
-        addon.port.emit('getSuggestedTags', { url: myself.savedUrl || window.location.toString() });
 
-        // thePKT_SAVED.sendMessage("getSuggestedTags",
-        // {
-        //     url: myself.savedUrl || window.location.toString()
-        // }, function(resp) {
-        //     $('.pkt_ext_suggestedtag_detail').removeClass('pkt_ext_suggestedtag_detail_loading');
-        //     console.log('got suggested tags response',resp);
-        //     if (resp.status == 'success')
-        //     {
-        //         var newtags = [];
-        //         for (var i = 0; i < resp.value.suggestedTags.length; i++)
-        //         {
-        //             newtags.push(resp.value.suggestedTags[i].tag);
-        //         }
-        //         myself.suggestedTagsLoaded = true;
-        //         if (!myself.mouseInside) {
-        //             myself.startCloseTimer();
-        //         }
-        //         myself.fillTagContainer(newtags,$('.pkt_ext_suggestedtag_detail ul'),'token_suggestedtag');
-        //     }
-        //     else if (resp.status == 'error') {
-        //         var msg = $('<p class="suggestedtag_msg">');
-        //         msg.text(resp.error);
-        //         $('.pkt_ext_suggestedtag_detail').append(msg);
-        //         this.suggestedTagsLoaded = true;
-        //         if (!myself.mouseInside) {
-        //             myself.startCloseTimer();
-        //         }
-        //     }
-        // });
-    }
-    this.initAutoCloseEvents = function() {
-        this.wrapper.on('mouseenter',function() {
-            myself.mouseInside = true;
-            myself.stopCloseTimer();
-        });
-        this.wrapper.on('mouseleave',function() {
-            myself.mouseInside = false;
-            myself.startCloseTimer();
-        });
-        this.wrapper.on('click',function(e) {
-            myself.closeValid = false;
-        });
-    };
-    this.startCloseTimer = function(manualtime)
-    {
-        var settime = manualtime ? manualtime : myself.autocloseTiming;
-        if (typeof myself.autocloseTimer == 'number')
-        {
-            clearTimeout(myself.autocloseTimer);
-        }
-        myself.autocloseTimer = setTimeout(function()
-        {
-            if (myself.closeValid || myself.preventCloseTimerCancel)
-            {
-                myself.preventCloseTimerCancel = false;
-                myself.closePopup();
-            }
-        }, settime);
-    };
-    this.stopCloseTimer = function()
-    {
-        if (myself.preventCloseTimerCancel)
-        {
-            return;
-        }
-        clearTimeout(myself.autocloseTimer);
-    };
-    this.closePopup = function() {
-        myself.stopCloseTimer();
-        addon.port.emit('close');
-        // thePKT_SAVED.sendMessage("close");
-    };
     this.checkValidTagSubmit = function() {
         var inputlength = $.trim($('.pkt_ext_tag_input_wrapper').find('.token-input-input-token').children('input').val()).length;
         if ($('.pkt_ext_containersaved').find('.token-input-token').length || (inputlength > 0 && inputlength < 26))
@@ -332,19 +212,6 @@ var PKT_SAVED_OVERLAY = function (options)
             this.wrapper.find('.pkt_ext_suggestedtag_detail').removeClass('pkt_ext_suggestedtag_detail_disabled');
         }
     };
-    addon.port.on('addTags', function(resp)
-    {
-        console.log('got a response',resp);
-        if (resp.status == 'success')
-        {
-            myself.showStateFinalMsg(myself.dictJSON.tagssaved);
-        }
-        else if (resp.status == 'error')
-        {
-            $('.pkt_ext_edit_msg').addClass('pkt_ext_edit_msg_error pkt_ext_edit_msg_active').text(resp.error);
-        }
-    });
-
     this.initAddTagInput = function() {
         $('.pkt_ext_btn').click(function(e) {
             e.preventDefault();
@@ -368,22 +235,6 @@ var PKT_SAVED_OVERLAY = function (options)
               url: myself.savedUrl || window.location.toString(),
               tags: originaltags
             });
-            // thePKT_SAVED.sendMessage("addTags",
-            // {
-            //     url: myself.savedUrl || window.location.toString(),
-            //     tags: originaltags
-            // }, function(resp)
-            // {
-            //     console.log('got a response',resp);
-            //     if (resp.status == 'success')
-            //     {
-            //         myself.showStateFinalMsg(myself.dictJSON.tagssaved);
-            //     }
-            //     else if (resp.status == 'error')
-            //     {
-            //         $('.pkt_ext_edit_msg').addClass('pkt_ext_edit_msg_error pkt_ext_edit_msg_active').text(resp.error);
-            //     }
-            // });
         });
     };
     this.initRemovePageInput = function() {
@@ -498,88 +349,6 @@ var PKT_SAVED_OVERLAY = function (options)
         this.wrapper.addClass('pkt_ext_container_finalstate');
         this.wrapper.find('.pkt_ext_detail h2').text(msg);
     };
-    this.getTranslations = function()
-    {
-        var language = window.navigator.language.toLowerCase();
-        this.dictJSON = {};
-
-        var dictsuffix = 'en-US';
-
-        if (language.indexOf('en') == 0)
-        {
-            dictsuffix = 'en';
-        }
-        else if (language.indexOf('it') == 0)
-        {
-            dictsuffix = 'it';
-        }
-        else if (language.indexOf('fr-ca') == 0)
-        {
-            dictsuffix = 'fr';
-        }
-        else if (language.indexOf('fr') == 0)
-        {
-            dictsuffix = 'fr';
-        }
-        else if (language.indexOf('de') == 0)
-        {
-            dictsuffix = 'de';
-        }
-        else if (language.indexOf('es-es') == 0)
-        {
-            dictsuffix = 'es';
-        }
-        else if (language.indexOf('es-419') == 0)
-        {
-            dictsuffix = 'es_419';
-        }
-        else if (language.indexOf('es') == 0)
-        {
-            dictsuffix = 'es';
-        }
-        else if (language.indexOf('ja') == 0)
-        {
-            dictsuffix = 'ja';
-        }
-        else if (language.indexOf('nl') == 0)
-        {
-            dictsuffix = 'nl';
-        }
-        else if (language.indexOf('pt-pt') == 0)
-        {
-            dictsuffix = 'pt_PT';
-        }
-        else if (language.indexOf('pt') == 0)
-        {
-            dictsuffix = 'pt_BR';
-        }
-        else if (language.indexOf('ru') == 0)
-        {
-            dictsuffix = 'ru';
-        }
-        else if (language.indexOf('zh-tw') == 0)
-        {
-            dictsuffix = 'zh_TW';
-        }
-        else if (language.indexOf('zh') == 0)
-        {
-            dictsuffix = 'zh_CN';
-        }
-        else if (language.indexOf('ko') == 0)
-        {
-            dictsuffix = 'ko';
-        }
-        else if (language.indexOf('pl') == 0)
-        {
-            dictsuffix = 'pl';
-        }
-
-        // TODO: when we add all dictionaries, modify this, but for now hard code to English
-        dictsuffix = 'en';
-
-        this.dictJSON = Translations[dictsuffix];
-
-    };
 };
 
 PKT_SAVED_OVERLAY.prototype = {
@@ -592,15 +361,6 @@ PKT_SAVED_OVERLAY.prototype = {
         }
         this.active = true;
 
-        // set translations
-        this.getTranslations();
-
-        // Create actual content
-        $('body').append(Handlebars.templates.saved_shell(this.dictJSON));
-
-        // Add in premium content (if applicable based on premium status)
-        this.createPremiumFunctionality();
-
         // Initialize functionality for overlay
         this.wrapper = $('.pkt_ext_containersaved');
         this.initTagInput();
@@ -608,74 +368,170 @@ PKT_SAVED_OVERLAY.prototype = {
         this.initRemovePageInput();
         this.initOpenListInput();
         this.initAutoCloseEvents();
-    },
-    createPremiumFunctionality: function()
-    {
-        if (this.premiumStatus && !$('.pkt_ext_suggestedtag_detail').length)
-        {
-            console.log('make premium');
-            $('body').append(Handlebars.templates.saved_premiumshell(this.dictJSON));
-        }
     }
 };
 
+function Pocket() {
+  // save options locally here
+  addon.port.on('options', function(options) {
+    console.log('options', options);
+    this.options = options;
+    this.premiumStatus = options.premiumStatus || false;
+  }.bind(this));
+  addon.port.on('getTags', this.handleGetTags);
 
-// Layer between Bookmarklet and Extensions
-var PKT_SAVED = function () {};
-
-PKT_SAVED.prototype = {
-    init: function () {
-        if (this.inited) {
-            return;
-        }
-        this.overlay = new PKT_SAVED_OVERLAY();
-
-        this.inited = true;
-    },
-
-    addMessageListener: function(messageId, callback) {
-      self.port.on(messageId, callback);
-        // Messaging.addMessageListener(messageId, callback);
-    },
-
-    sendMessage: function(messageId, payload, callback) {
-      self.port.emit(messageId, payload);
-        // Messaging.sendMessage(messageId, payload, callback);
-    },
-
-    create: function() {
-        var myself = this;
-        var url = window.location.href.split('premiumStatus=');
-        if (url.length > 1)
-        {
-            myself.overlay.premiumStatus = (url[1] == '1');
-        }
-        myself.overlay.create();
-
-        // tell back end we're ready
-        // thePKT_SAVED.sendMessage("show");
-
-        // wait confirmation of save before flipping to final saved state
-        addon.port.on('saved', function(resp) {
-            console.log('sweet, switch to full mode because of registered hit',resp);
-            myself.overlay.showStateSaved(resp);
-        });
-        // thePKT_SAVED.addMessageListener("saveLink", function(resp)
-        // {
-        //     console.log('sweet, switch to full mode because of registered hit',resp);
-        //     myself.overlay.showStateSaved(resp);
-        // });
-
-    }
 }
 
-$(function()
-{
-    if(!window.thePKT_SAVED){
-        var thePKT_SAVED = new PKT_SAVED();
-        window.thePKT_SAVED = thePKT_SAVED;
-        thePKT_SAVED.init();
-    }
+// anything that needs the DOM should wire up here
+Pocket.prototype.init = function() {
+  addon.port.on('saved', this.handleSaved);
+  addon.port.on('addTags', this.handleAddTags);
+  addon.port.on('getSuggestedTags', this.handleSuggestedTags);
+  this.initPremiumStatus();
+  this.initTimer();
+};
 
-    window.thePKT_SAVED.create();
+Pocket.prototype.initPremiumStatus = function() {
+  if (this.premiumStatus) {
+    $('.pkt_ext_suggestedtag_detail').show();
+  }
+};
+
+Pocket.prototype.initTimer = function() {
+  this.autocloseTiming = 3500;
+  this.timer = null;
+  var wrapper = $('.pkt_ext_containersaved');
+  wrapper.on('mouseenter', function() {
+      this.mouseInside = true;
+      this.stopCloseTimer();
+  }.bind(this));
+  wrapper.on('mouseleave', function() {
+    this.mouseInside = false;
+    this.startCloseTimer();
+  });
+  wrapper.on('click', function() {
+    this.closeValid = false;
+  });
+};
+
+function clearTimer(timer) {
+  clearTimeout(timer);
+  timer = null;
+}
+
+Pocket.prototype.startTimer = function() {
+  if (this.timer) {
+    clearTimer(this.timer);
+  }
+  this.timer = setTimeout(function() {
+    if (this.closeValid || this.preventCloseTimerCancel) {
+      this.preventCloseTimerCancel = false;
+      this.close();
+    }
+  }.bind(this), this.autocloseTiming);
+};
+
+Pocket.prototype.stopTimer = function() {
+  if (this.preventCloseTimerCancel) {
+    return;
+  }
+  clearTimer(this.timer);
+};
+
+Pocket.prototype.getTags = function() {
+  addon.port.emit('getTags');
+};
+
+Pocket.prototype.handleGetTabs = function(resp) {
+  if (typeof resp == 'object' && typeof resp.tags == 'object') {
+    this.userTags = resp.tags;
+  }
+};
+
+Pocket.prototype.close = function() {
+  addon.port.emit('close');
+};
+
+Pocket.prototype.getSuggestedTags = function() {
+  if (!$('.pkt_ext_suggestedtag_detail').length) {
+    this.suggestedTagsLoaded = true;
+    this.startCloseTimer();
+    return;
+  }
+  console.log('calling suggested tags', this.savedUrl);
+  addon.port.emit('getSuggestedTags', { url: this.savedUrl || window.location.toString() });
+};
+
+Pocket.prototype.handleSuggestedTags = function(resp) {
+  $('.pkt_ext_suggestedtag_detail').removeClass('pkt_ext_suggestedtag_detail_loading');
+  console.log('got suggested tags response',resp);
+  if (resp.status == 'success')
+  {
+    var newtags = [];
+    for (var i = 0; i < resp.value.suggestedTags.length; i++)
+    {
+      newtags.push(resp.value.suggestedTags[i].tag);
+    }
+    this.suggestedTagsLoaded = true;
+    if (!this.mouseInside) {
+      this.startCloseTimer();
+    }
+    this.fillTagContainer(newtags,$('.pkt_ext_suggestedtag_detail ul'),'token_suggestedtag');
+  }
+  else if (resp.status == 'error') {
+    var msg = $('<p class="suggestedtag_msg">');
+    msg.text(resp.error);
+    $('.pkt_ext_suggestedtag_detail').append(msg);
+    this.suggestedTagsLoaded = true;
+    if (!this.mouseInside) {
+      this.startCloseTimer();
+    }
+  }
+};
+
+Pocket.prototype.showStateFinalMsg = function(msg) {
+  var wrapper = $('.pkt_ext_containersaved');
+  wrapper.find('.pkt_ext_tag_detail').once('transitionend',
+  function(e) {
+    this.preventCloseTimerCancel = true;
+    this.startCloseTimer(this.autocloseTimingFinalState);
+  }.bind(this));
+  wrapper.addClass('pkt_ext_container_finalstate');
+  wrapper.find('.pkt_ext_detail h2').text(msg);
+};
+
+Pocket.prototype.handleAddTags = function(resp) {
+  console.log('got a response',resp);
+  if (resp.status == 'success') {
+    this.showStateFinalMsg(this.dictJSON.tagssaved);
+  } else if (resp.status == 'error') {
+    $('.pkt_ext_edit_msg').addClass('pkt_ext_edit_msg_error pkt_ext_edit_msg_active').text(resp.error);
+  }
+};
+
+Pocket.prototype.handleSaved = function(resp) {
+  var wrapper = $('.pkt_ext_containersaved');
+  console.log('sweet, switch to full mode because of registered hit', resp);
+  console.log('start of saved state', resp);
+  // wrapper.find('.pkt_ext_detail h2').text(this.dictJSON.pagesaved);
+  wrapper.find('.pkt_ext_btn').addClass('pkt_ext_btn_disabled');
+  if (typeof resp.item == 'object') {
+    this.savedItemId = resp.item.item_id;
+    this.savedUrl = resp.item.resolved_url;
+  }
+  $('.pkt_ext_containersaved').addClass('pkt_ext_container_detailactive').removeClass('pkt_ext_container_finalstate');
+
+  this.getTags();
+  if (this.suggestedTagsLoaded) {
+    this.startCloseTimer();
+  }
+  else {
+    this.getSuggestedTags();
+  }
+};
+
+var theBigP = new Pocket();
+
+$(document).ready(function() {
+  theBigP.init();
 });
