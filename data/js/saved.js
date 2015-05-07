@@ -1,6 +1,6 @@
 'use strict';
 /*jshint browser:true */
-/*globals $,addon */
+/*globals $,addon,Pocket */
 
 /*
 PKT_SAVED_OVERLAY is the view itself and contains all of the methods to manipute the overlay and messaging.
@@ -371,17 +371,6 @@ PKT_SAVED_OVERLAY.prototype = {
     }
 };
 
-function Pocket() {
-  // save options locally here
-  addon.port.on('options', function(options) {
-    console.log('options', options);
-    this.options = options;
-    this.premiumStatus = options.premiumStatus || false;
-  }.bind(this));
-  addon.port.on('getTags', this.handleGetTags);
-
-}
-
 // anything that needs the DOM should wire up here
 Pocket.prototype.init = function() {
   addon.port.on('saved', this.handleSaved);
@@ -529,9 +518,3 @@ Pocket.prototype.handleSaved = function(resp) {
     this.getSuggestedTags();
   }
 };
-
-var theBigP = new Pocket();
-
-$(document).ready(function() {
-  theBigP.init();
-});

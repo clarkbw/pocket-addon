@@ -9,5 +9,4 @@ $(document).ready(function() {
     addon.port.emit('openTabWithUrl', $(this).attr('href'));
     return false;
   });
-  addon.port.emit('show');
 });
