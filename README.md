@@ -1,4 +1,6 @@
 # pocket-addon
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/clarkbw/pocket-addon.svg)](https://greenkeeper.io/)
 A Firefox add-on for testing Pocket built with the [mozilla add-on sdk, jpm](https://github.com/mozilla/jpm/)
 
 ## Setup
